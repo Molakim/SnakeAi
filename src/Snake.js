@@ -1,23 +1,28 @@
 class Snake {
   constructor (){
+    this.head = new Element(true);
     this.body = [];
-    this.body.push(new Element(true));
+    this.body.push(this.head);
     for (let i = 1; i<snakeLength; i++){
       this.body.push(new Element(false, this.body[i-1]))
     }
-    console.log(this.body)
+    this.tail = this.body[snakeLength - 1];
   }
 
   update() {
-    this.body[snakeLength - 1].update();
+    if (this.head.detectCollision()){
+      this.changeDirection(directionEnum.PAUSE);
+      console.log("FRUIT DETECTED");
+    };
+    this.tail.update();
   }
 
   show() {
-    this.body[snakeLength - 1].show();
+    this.tail.show();
   }
 
   changeDirection(direction){
-    this.body[snakeLength - 1].changeDirection(direction);
-    this.body[snakeLength - 1].show();    
+    this.tail.changeDirection(direction);
+    this.tail.show();    
   }
 }

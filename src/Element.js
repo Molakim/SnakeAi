@@ -1,10 +1,10 @@
 
 class Element {
-  constructor(isHead = false, head = null) {
+  constructor(isHead = false, head = null, direction = directionEnum.RIGHT) {
     if (isHead){
-      this.x = round(random()*window.innerWidth/2);
-      this.y = round(random()*window.innerHeight/2);
-      this.direction = directionEnum.RIGHT;
+      this.x = round(random()*32)*40;
+      this.y = round(random()*18)*40;
+      this.direction = direction;
     } else {
       this.x = head.x - size;
       this.y = head.y;
@@ -14,10 +14,10 @@ class Element {
     this.isHead = isHead;
     this.speed = speed;
   }
-  show(){
+  show(color = 255){
     if(this.head === null){
       // I am a head
-      fill(255);
+      fill(color);
       ellipse(this.x, this.y, size, size);
       
     } else {
@@ -59,14 +59,39 @@ class Element {
       }
       this.head.update();
     }
-
-    
   }
-  
+
+  detectCollision(){
+    let temp = 0;
+    let movement = this.speed*size;
+    console.log(fruit.elem.x);
+    switch(this.direction){
+      case directionEnum.UP:
+        temp = this.y - movement;
+        return fruit.elem.y === temp ? fruit.elem.x === this.x ? true : false : false;
+      case directionEnum.DOWN:
+        temp = this.y + movement;
+        return fruit.elem.y === temp ? fruit.elem.x === this.x ? true : false : false;
+      case directionEnum.LEFT:
+        temp = this.x - movement;
+        console.log(temp) 
+        return fruit.elem.x === temp ? fruit.elem.y === this.y ? true : false : false;
+      case directionEnum.RIGHT:
+        temp = this.x + movement;
+        return fruit.elem.x === temp ? fruit.elem.y === this.y ? true : false : false;
+      case directionEnum.PAUSE:
+        break;
+    }
+  }
+
+
 
   changeDirection(direction){
-    this.direction = direction;
-    this.head.changeDirection(direction); 
-    update(); // tail update position
+    if(this.head === null){
+      this.direction = direction;
+    } else {
+      this.direction = direction;
+      this.head.changeDirection(direction); 
+    }
   }
 }
