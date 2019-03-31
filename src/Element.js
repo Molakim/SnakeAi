@@ -4,8 +4,8 @@ class Element {
     if (isHead){
       if(isFruit){
         let isAvailable = true;
-        this.x = round(random()*32)*40;
-        this.y = round(random()*18)*40;
+        this.x = round(random()*32)*size;
+        this.y = round(random()*18)*size;
         while (isAvailable) {
           snake.body.forEach(element => {
             element.x === this.x ? isAvailable = isAvailable && false : isAvailable = isAvailable && true;
@@ -13,12 +13,12 @@ class Element {
           if (isAvailable) {
             break;
           } else {
-            this.x = round(random()*32)*40;
+            this.x = round(random()*32)*size;
           }
         }
       } else {
-        this.x = round(random()*32)*40;
-        this.y = round(random()*18)*40;
+        this.x = round(random()*32)*size;
+        this.y = round(random()*18)*size;
       }
       this.direction = direction;
     } else {

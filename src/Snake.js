@@ -1,5 +1,6 @@
 class Snake {
   constructor (){
+    this.isAlive = true;
     this.head = new Element(true);
     this.body = [];
     this.body.push(this.head);

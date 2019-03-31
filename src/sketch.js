@@ -1,14 +1,17 @@
+const windW = window.outerWidth;
+const windH = windW*18/32;
+
 const directionEnum = Object.freeze({"UP":1, "DOWN":2, "LEFT":3, "RIGHT":4, "PAUSE":5})
 let snake;
 let fruit;
-let snakeLength = 8;
+let snakeLength = 3;
 const frameRate = 5;
 let frameCounter = 0;
 let speed = 1;
-const size = 40;
+const size = windW/32;
 
 function setup(){
-  createCanvas(640*2, 360*2);
+  createCanvas(windW, windH);
   snake = new Snake();
   fruit = new Fruit();
 }
