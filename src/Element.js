@@ -15,42 +15,58 @@ class Element {
     this.speed = speed;
   }
   show(){
-    fill(255);
-    ellipse(this.x, this.y, size, size);
+    if(this.head === null){
+      // I am a head
+      fill(255);
+      ellipse(this.x, this.y, size, size);
+      
+    } else {
+      this.head.show();
+      fill(255);
+      ellipse(this.x, this.y, size, size);
+    }
+    
   }
 
   update(){
-    let temp = this.speed*frameRate;    
-    switch(this.direction){
-      case directionEnum.UP:
-        this.y -= temp;
-        break;
-      case directionEnum.DOWN:
-        this.y += temp;
-        break;
-      case directionEnum.LEFT:
-        this.x -= temp;
-        break;
-      case directionEnum.RIGHT:
-        this.x += temp;
-        break;
-      case directionEnum.PAUSE:
-        break;
+    let temp = this.speed*size;
+    
+    if(this.head === null){
+      // I am a head
+      switch(this.direction){
+        case directionEnum.UP:
+          this.y -= temp;
+          break;
+        case directionEnum.DOWN:
+          this.y += temp;
+          break;
+        case directionEnum.LEFT:
+          this.x -= temp;
+          break;
+        case directionEnum.RIGHT:
+          this.x += temp;
+          break;
+        case directionEnum.PAUSE:
+          break;
+      }
+      
+    } else {
+      // I am not a head
+      if(this.direction !== directionEnum.PAUSE){
+        this.x = this.head.x;
+        this.y = this.head.y;
+        this.direction = this.head.direction;
+      }
+      this.head.update();
     }
+
+    
   }
   
 
   changeDirection(direction){
-    // if(this.head === null){
-    //   // I am a head
-    //   this.direction = direction;
-      
-    // } else {
-    //   // I am not a head
-    //   this.head.changeDirection(direction); // head update direction
-    //   this.head.update(); // head update position
-    //   this.head.show(); // head move
-    // }
     this.direction = direction;
+    this.head.changeDirection(direction); 
+    update(); // tail update position
   }
 }

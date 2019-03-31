@@ -1,9 +1,10 @@
 const directionEnum = Object.freeze({"UP":1, "DOWN":2, "LEFT":3, "RIGHT":4, "PAUSE":5})
 let snake;
+let snakeLength = 8;
 const frameRate = 20;
 let frameCounter = 0;
 const speed = 1;
-const size = 20;
+const size = 40;
 
 function setup(){
   createCanvas(window.innerWidth/2, window.innerHeight/2);
@@ -11,13 +12,9 @@ function setup(){
 }
 
 function draw(){
-  // snake.head.update();
-  // snake.head.show();
-  // snake.body.update();
-  // snake.body.show();
   if (frameCounter <= frameRate ){
     frameCounter++;
-  } else { // show every 20 framerate
+  } else {
     frameCounter = 0;
     background(0);
     snake.update();
@@ -27,8 +24,7 @@ function draw(){
 }
 
 function keyPressed (){
-  frameCounter = 0;
-  background(0);
+  frameCounter = frameRate;
   switch (key){
     case ' ':
       snake.changeDirection(directionEnum.PAUSE);

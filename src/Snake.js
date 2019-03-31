@@ -1,29 +1,23 @@
 class Snake {
   constructor (){
-    this.head = new Element(true);
-    this.tail = new Element(false, this.head);
+    this.body = [];
+    this.body.push(new Element(true));
+    for (let i = 1; i<snakeLength; i++){
+      this.body.push(new Element(false, this.body[i-1]))
+    }
+    console.log(this.body)
   }
 
   update() {
-    this.head.update();
-    this.tail.update();
+    this.body[snakeLength - 1].update();
   }
 
   show() {
-    this.head.show();
-    this.tail.show();
+    this.body[snakeLength - 1].show();
   }
 
   changeDirection(direction){
-    this.tail.update(); // tail update position
-    this.tail.changeDirection(direction); //tail update direction
-    this.head.show(); // tail move
-    this.head.changeDirection(direction); // head update direction
-    this.head.update(); // head update position
-    this.head.show(); // head move
-
-    // this.tail.changeDirection(direction);
-    
-    
+    this.body[snakeLength - 1].changeDirection(direction);
+    this.body[snakeLength - 1].show();    
   }
 }
