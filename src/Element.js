@@ -50,16 +50,36 @@ class Element {
       // I am a head
       switch(this.direction){
         case directionEnum.UP:
-          this.y -= temp;
+          if (this.y - temp < 0){
+            // reached the top screen
+            this.y = windH;
+          } else {
+            this.y -= temp;
+          }
           break;
         case directionEnum.DOWN:
-          this.y += temp;
+          if (this.y + temp > windH){
+            // reached the bottom screen
+            this.y = 0;
+          } else {
+            this.y += temp;
+          }
           break;
         case directionEnum.LEFT:
-          this.x -= temp;
+          if (this.x - temp < 0){
+            // reached the left screen
+            this.x = windW;
+          } else {
+            this.x -= temp;
+          }
           break;
         case directionEnum.RIGHT:
-          this.x += temp;
+          if (this.x + temp > windW){
+            // reached the right screen
+            this.x = 0;
+          } else {
+            this.x += temp;
+          }
           break;
         case directionEnum.PAUSE:
           break;
@@ -77,11 +97,14 @@ class Element {
   }
 
   changeDirection(direction){
-    if(this.head === null){
-      this.direction = direction;
-    } else {
-      this.direction = direction;
-      this.head.changeDirection(direction); 
+    if(direction !== (-1*this.direction)){
+      //The command direction is not the opposite direction
+      if(this.head === null){
+        this.direction = direction;
+      } else {
+        this.direction = direction;
+        this.head.changeDirection(direction); 
+      }
     }
   }
 

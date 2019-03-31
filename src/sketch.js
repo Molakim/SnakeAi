@@ -1,7 +1,7 @@
-const windW = window.outerWidth;
+const windW = 1280;
 const windH = windW*18/32;
 
-const directionEnum = Object.freeze({"UP":1, "DOWN":2, "LEFT":3, "RIGHT":4, "PAUSE":5})
+const directionEnum = Object.freeze({"UP":1, "DOWN":-1, "RIGHT":2, "LEFT":-2, "PAUSE":5})
 let snake;
 let fruit;
 let snakeLength = 3;
