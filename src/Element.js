@@ -1,9 +1,25 @@
 
 class Element {
-  constructor(isHead = false, head = null, direction = directionEnum.RIGHT) {
+  constructor(isHead = false, head = null, direction = directionEnum.RIGHT, isFruit = false) {
     if (isHead){
-      this.x = round(random()*32)*40;
-      this.y = round(random()*18)*40;
+      if(isFruit){
+        let isAvailable = true;
+        this.x = round(random()*32)*40;
+        this.y = round(random()*18)*40;
+        while (isAvailable) {
+          snake.body.forEach(element => {
+            element.x === this.x ? isAvailable = isAvailable & false : isAvailable = isAvailable & true;
+          }); 
+          if (isAvailable) {
+            break;
+          } else {
+            this.x = round(random()*32)*40;
+          }
+        }
+      } else {
+        this.x = round(random()*32)*40;
+        this.y = round(random()*18)*40;
+      }
       this.direction = direction;
     } else {
       this.x = head.x - size;

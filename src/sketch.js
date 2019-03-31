@@ -2,15 +2,15 @@ const directionEnum = Object.freeze({"UP":1, "DOWN":2, "LEFT":3, "RIGHT":4, "PAU
 let snake;
 let fruit;
 let snakeLength = 8;
-const frameRate = 1;
+const frameRate = 5;
 let frameCounter = 0;
 const speed = 1;
 const size = 40;
 
 function setup(){
   createCanvas(640*2, 360*2);
-  fruit = new Fruit();
   snake = new Snake();
+  fruit = new Fruit();
 }
 
 function draw(){

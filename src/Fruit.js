@@ -1,7 +1,7 @@
 class Fruit {
 
   constructor(){
-    this.elem = new Element(true, null, directionEnum.PAUSE);
+    this.elem = new Element(true, null, directionEnum.PAUSE, true);
   }
 
   show(){
