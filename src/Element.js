@@ -17,7 +17,7 @@ class Element {
   show(color = 255){
     if(this.head === null){
       // I am a head
-      fill(color);
+      fill(color, color, color);
       ellipse(this.x, this.y, size, size);
       
     } else {
@@ -61,7 +61,7 @@ class Element {
     }
   }
 
-  detectCollision(){
+  detectFruit(){
     let temp = 0;
     let movement = this.speed*size;
     console.log(fruit.elem.x);

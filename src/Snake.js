@@ -10,9 +10,10 @@ class Snake {
   }
 
   update() {
-    if (this.head.detectCollision()){
-      this.changeDirection(directionEnum.PAUSE);
+    if (this.head.detectFruit()){
       console.log("FRUIT DETECTED");
+      this.gainLength();
+      fruit = new Fruit();
     };
     this.tail.update();
   }
@@ -24,5 +25,11 @@ class Snake {
   changeDirection(direction){
     this.tail.changeDirection(direction);
     this.tail.show();    
+  }
+
+  gainLength(){
+    snakeLength++;
+    this.body.push(new Element(false, this.tail));
+    this.tail = this.body[snakeLength - 1];
   }
 }
