@@ -8,7 +8,7 @@ class Element {
         this.y = round(random()*18)*40;
         while (isAvailable) {
           snake.body.forEach(element => {
-            element.x === this.x ? isAvailable = isAvailable & false : isAvailable = isAvailable & true;
+            element.x === this.x ? isAvailable = isAvailable && false : isAvailable = isAvailable && true;
           }); 
           if (isAvailable) {
             break;
@@ -28,7 +28,6 @@ class Element {
     }
     this.head = head;
     this.isHead = isHead;
-    this.speed = speed;
   }
   show(color = 255){
     if(this.head === null){
@@ -45,7 +44,7 @@ class Element {
   }
 
   update(){
-    let temp = this.speed*size;
+    let temp = speed*size;
     
     if(this.head === null){
       // I am a head
@@ -77,10 +76,19 @@ class Element {
     }
   }
 
+  changeDirection(direction){
+    if(this.head === null){
+      this.direction = direction;
+    } else {
+      this.direction = direction;
+      this.head.changeDirection(direction); 
+    }
+  }
+
   detectFruit(){
+    //fruit collision detection
     let temp = 0;
-    let movement = this.speed*size;
-    console.log(fruit.elem.x);
+    let movement = speed*size;
     switch(this.direction){
       case directionEnum.UP:
         temp = this.y - movement;
@@ -90,7 +98,6 @@ class Element {
         return fruit.elem.y === temp ? fruit.elem.x === this.x ? true : false : false;
       case directionEnum.LEFT:
         temp = this.x - movement;
-        console.log(temp) 
         return fruit.elem.x === temp ? fruit.elem.y === this.y ? true : false : false;
       case directionEnum.RIGHT:
         temp = this.x + movement;
@@ -100,14 +107,36 @@ class Element {
     }
   }
 
-
-
-  changeDirection(direction){
-    if(this.head === null){
-      this.direction = direction;
-    } else {
-      this.direction = direction;
-      this.head.changeDirection(direction); 
-    }
+  detectBody(){
+    //body collision detection
+    let temp = 0;
+    let movement = speed*size;
+    let isBodyDetected = false;
+    snake.body.forEach(elem => {
+      // check if there is an element of body in the next move
+      
+      switch(elem.direction){
+        case directionEnum.UP:
+          temp = this.y - movement;
+          isBodyDetected = isBodyDetected || ((temp === elem.y) && (this.x === elem.x))
+          break;
+        case directionEnum.DOWN:
+          temp = this.y + movement;
+          isBodyDetected = isBodyDetected || ((temp === elem.y) && (this.x === elem.x))
+          break;
+        case directionEnum.LEFT:
+          temp = this.x - movement;
+          isBodyDetected = isBodyDetected || ((temp === elem.x) && (this.y === elem.y))
+          break;
+        case directionEnum.RIGHT:
+          temp = this.x + movement;
+          isBodyDetected = isBodyDetected || ((temp === elem.x) && (this.y === elem.y))
+          break;
+        case directionEnum.PAUSE:
+          break;
+      }
+    }); 
+    return isBodyDetected;
   }
+
 }

@@ -4,7 +4,7 @@ let fruit;
 let snakeLength = 8;
 const frameRate = 5;
 let frameCounter = 0;
-const speed = 1;
+let speed = 1;
 const size = 40;
 
 function setup(){

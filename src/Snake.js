@@ -10,11 +10,19 @@ class Snake {
   }
 
   update() {
+
+    
     if (this.head.detectFruit()){
-      console.log("FRUIT DETECTED");
+      // If there is a fruit infront
       this.gainLength();
       fruit = new Fruit();
     };
+    if (this.head.detectBody()){
+      // If there is a part of body infront
+      this.tail.changeDirection(directionEnum.PAUSE);
+      speed = 0;
+    }
+
     this.tail.update();
   }
 
