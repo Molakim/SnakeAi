@@ -1,6 +1,7 @@
 const windW = 1280;
 const windH = windW*18/32;
-
+let headSprite;
+let bodySprite;
 const directionEnum = Object.freeze({"UP":1, "DOWN":-1, "RIGHT":2, "LEFT":-2, "PAUSE":5})
 let snake;
 let fruit;
@@ -9,6 +10,14 @@ const frameRate = 5;
 let frameCounter = 0;
 let speed = 1;
 const size = windW/32;
+
+
+function preload() {
+  headSprite = loadImage("img/headAngry.png");
+  bodySprite = loadImage("img/bodyAngry.png");
+}
+
+
 
 function setup(){
   createCanvas(windW, windH);
@@ -37,6 +46,8 @@ function keyPressed (){
     case ' ':
       snake.changeDirection(directionEnum.PAUSE);
       break;
+    case 'R':
+      rotate(Pi/2);
   }
 
   switch (keyCode) {

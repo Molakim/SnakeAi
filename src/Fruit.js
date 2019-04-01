@@ -5,7 +5,7 @@ class Fruit {
   }
 
   show(){
-    this.elem.show(125);
+    this.elem.show();
   }
 
   update(){

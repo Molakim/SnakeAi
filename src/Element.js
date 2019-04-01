@@ -4,8 +4,8 @@ class Element {
     if (isHead){
       if(isFruit){
         let isAvailable = true;
-        this.x = round(random()*32)*size;
-        this.y = round(random()*18)*size;
+        this.x = (1 + round(random()*30))*size;
+        this.y = (1 + round(random()*16))*size;
         while (isAvailable) {
           snake.body.forEach(element => {
             element.x === this.x ? isAvailable = isAvailable && false : isAvailable = isAvailable && true;
@@ -13,7 +13,7 @@ class Element {
           if (isAvailable) {
             break;
           } else {
-            this.x = round(random()*32)*size;
+            this.x = (1 + round(random()*30))*size;
           }
         }
       } else {
@@ -28,19 +28,30 @@ class Element {
     }
     this.head = head;
     this.isHead = isHead;
+    this.isFruit = isFruit
   }
-  show(color = 255){
-    if(this.head === null){
-      // I am a head
-      fill(color, color, color);
+  show(){
+    if(this.isFruit){
+      fill(0, 255, 0);
       ellipse(this.x, this.y, size, size);
-      
+
     } else {
-      this.head.show();
-      fill(255);
-      ellipse(this.x, this.y, size, size);
-    }
-    
+      if(this.head === null){
+        // I am a head
+        // image(headSprite, this.x, this.y);
+        fill(255, 0, 0);
+        ellipse(this.x, this.y, size, size);
+      } else {
+        this.head.show();
+        // image(bodySprite, this.x, this.y);
+        if(snake.isAlive){
+          fill(255);
+        } else {
+          fill(255, 0, 0);
+        }
+        ellipse(this.x, this.y, size, size);
+      }
+    } 
   }
 
   update(){

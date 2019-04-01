@@ -22,6 +22,7 @@ class Snake {
       // If there is a part of body infront
       this.tail.changeDirection(directionEnum.PAUSE);
       speed = 0;
+      this.isAlive = false;
     }
 
     this.tail.update();
