@@ -1,4 +1,4 @@
-const windW = 1280;
+const windW = 640;
 const windH = windW*9/16;
 let headSprite;
 let bodySprite;
@@ -20,7 +20,7 @@ var population;
 var speed = 60;
 
 var superSpeed = 1;
-var showBest = true; //true if only show the best of the previous generation
+var showBest = false; //true if only show the best of the previous generation
 var runBest = false; //true if replaying the best ever game
 var humanPlaying = false; //true if the user is playing
 
@@ -42,7 +42,7 @@ function preload() {
 
 
 function setup(){
-  createCanvas(windW, windH);
+  createCanvas(windW*2+440, windH*2+160);
   // snake = new Snake();
   // fruit = new Fruit();
   population = new Population(POPULATION_SIZE);
@@ -50,9 +50,9 @@ function setup(){
 }
 
 function draw(){
-  if (frameCounter <= frameRate ){
-    frameCounter++;
-  } else {
+  // if (frameCounter <= frameRate ){
+  //   frameCounter++;
+  // } else {
     frameCounter = 0;
     drawToScreen();
 
@@ -72,7 +72,10 @@ function draw(){
       }
     }
 
-  }
+  // }
+  if (showNothing) {background(0)}
+  drawBrain();
+  writeInfo();
   
 }
 
@@ -82,13 +85,12 @@ function drawToScreen () {
     background(0);
     // showAll();
     // updateAll();
-    drawBrain();
   }
 }
 
 function drawBrain() { //show the brain of whatever genome is currently showing
-  var startX = 350; //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<replace
-  var startY = 550;
+  var startX = 1000; //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<replace
+  var startY = 200;
   var w = 300;
   var h = 200;
 
@@ -114,6 +116,45 @@ function showBestEverPlayer() {
   } else { //once dead
     runBest = false; //stop replaying it
     population.bestPlayer = population.bestPlayer.cloneForReplay(); //reset the best player so it can play again
+  }
+}
+
+function writeInfo() {
+  fill(255);
+  stroke(255);
+  textAlign(LEFT);
+  textSize(30);
+  textSize(50);
+  textAlign(CENTER);
+  if (showBestEachGen) {
+    text(genPlayerTemp.score, (windW+360) / 2, 50); //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<replace
+    textAlign(LEFT);
+    textSize(30);
+
+    text("Gen: " + (genPlayerTemp.gen + 1), 20, 50);
+  } else if (humanPlaying) {
+    text(humanPlayer.score, (windW+360) / 2, 50); //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<replace
+  } else if (runBest) {
+    text(population.bestPlayer.score, windW + 180, 50); //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<replace
+    textSize(30);
+
+    textAlign(LEFT);
+    text("Gen: " + population.gen, 20, 50);
+  } else if (showBest) {
+    text(population.players[0].score, (windW+360) / 2, 50); //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<replace
+    textAlign(LEFT);
+    textSize(30);
+    text("Gen: " + population.gen, 20, 50);
+
+  } else {
+    let bestCurrentPlayer = population.getCurrentBest();
+
+    text(bestCurrentPlayer.score.toFixed(2), (windW+360) / 2, 50); //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<replace
+    textSize(30);
+    textAlign(LEFT);
+
+    text("Gen: " + population.gen, 20, 50);
+
   }
 }
 

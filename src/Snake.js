@@ -19,13 +19,14 @@ class Snake {
     this.decision = []; //the out put of the NN
     this.unadjustedFitness;
     this.lifespan = 0; //how long the player lived for this.fitness
-    this.leftToLive = 100; //how long the player lived for this.fitness
+    this.leftToLive = 200; //how long the player lived for this.fitness
     this.bestScore = 0; //stores the this.score achieved used for replay
+    this.lastEaten = 0;
     this.dead = false;
     this.score = 0;
     this.gen = 0;
 
-    this.genomeInputs = 9;
+    this.genomeInputs = 6;
     this.genomeOutputs = 4;
     this.brain = new Genome(this.genomeInputs, this.genomeOutputs);
   }
@@ -35,35 +36,44 @@ class Snake {
     if(!this.dead) {
       this.lifespan ++;
       this.leftToLive --;
+      if (this.head.detectFruit()){
+        // If there is a fruit infront
+        this.gainLength();
+        this.fruit = new Fruit(true, null, directionEnum.PAUSE, true);
+        this.head.setFruit(this.fruit);
+      };
+      if (this.head.detectBody()){
+        // If there is a part of body infront
+        this.tail.changeDirection(directionEnum.PAUSE);
+        this.score --;
+        // console.log("SUICIDE");
+        this.dead = true;
+        // console.log(this.score);
+        
+      }
+      if (this.leftToLive === 1 ) {
+        this.score += 2;
+        // console.log("STARVATION");
+      }
+
+      if(this.leftToLive === 0 ) {
+        this.dead = true;
+      }
     }
-    if (this.head.detectFruit()){
-      // If there is a fruit infront
-      this.gainLength();
-      this.fruit = new Fruit(true, null, directionEnum.PAUSE, true);
-      this.head.setFruit(this.fruit);
-    };
-    if (this.head.detectBody()){
-      // If there is a part of body infront
-      this.tail.changeDirection(directionEnum.PAUSE);
+   
+
+    if( this.directionChangeCount / this.lifespan < 1/15) {
       this.dead = true;
+      this.lifespan *= 2;
+      this.score = 0;
+      // console.log("SUPPRESSION");
     }
-    if (this.leftToLive === 0 ) {
-      this.dead = true;
-    }
+
     this.tail.update();
     this.fruit.update();
   }
 
   show() {
-    if( this.directionChangeCount / this.lifespan < 1/30) {
-      this.dead = true;
-      this.lifespan *= 2;
-      this.score = 0;
-      // console.log("SUPPRESSION");
-    } else {
-      // console.log(this.directionChangeCount / this.lifespan)
-    }
-    
 
     if(!this.dead) {
       this.tail.show();
@@ -80,8 +90,10 @@ class Snake {
   gainLength(){
 
       this.snakeLength++;
-      this.score ++;
-      this.leftToLive += 200;
+      let temp = this.lastEaten;
+      this.lastEaten = this.lifespan;
+      this.score += (1 + ((this.lifespan - temp < 100) && (this.lifespan - temp > 20) ? 10/(this.lifespan - temp) : 0));
+      this.leftToLive += 50;
       this.body.push(new Element(false, this.tail));
       this.tail = this.body[this.snakeLength - 1];
   }
@@ -156,22 +168,24 @@ class Snake {
         break;
     }
 
-    for (let i = 1; i<this.snakeLength; i++){
-      if(this.body[i].x === positionX && this.body[i].y === positionY){
-        bodyDetected = true;
-        res.push(1/i);
-        break;
-      }
-    }
-    if (!bodyDetected) res.push(0);
-
     while(moveCounter !== 0){
 
 
-      if((this.fruit.elem.x === positionX) && (this.fruit.elem.y === positionY)){
+      if(!fruitDetected && (this.fruit.elem.x === positionX) && (this.fruit.elem.y === positionY)){
           fruitDetected = true;
           res.push(1);
           break;
+      }
+
+
+      if (!bodyDetected) {
+        for (let i = 1; i<this.snakeLength; i++){
+          if(this.body[i].x === positionX && this.body[i].y === positionY){
+            bodyDetected = true;
+            res.push(1/i);
+            break;
+          }
+        }
       }
 
       switch (direction){ // calculate next position
@@ -213,7 +227,8 @@ class Snake {
       distance++;
     } 
 
-    if(!fruitDetected) res.push(0);
+    if (!bodyDetected) res.push(0);
+    if (!fruitDetected) res.push(0);
 
     return res;
     
@@ -238,9 +253,9 @@ class Snake {
     tempValues = this.lookInDirection(absDirection > 1 ? -absDirection/2 : -absDirection*2);
     this.vision.push(tempValues[0]);
     this.vision.push(tempValues[1]);
+
+    // this.vision.push(Math.mod(this.head.x - this.fruit.x)/40, 1, )
     
-    this.vision.push(map(this.fruit.elem.x, 0, windW, 0, 1));
-    this.vision.push(map(this.fruit.elem.y, 0, windH, 0, 1));
 
 
   }
