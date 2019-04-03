@@ -1,21 +1,21 @@
 
 class Element {
-  constructor(isHead = false, head = null, direction = directionEnum.RIGHT, isFruit = false) {
+  constructor(isHead = false, head = null, direction = directionEnum.RIGHT, isFruit = false, fruit = null) {
     if (isHead){
       if(isFruit){
         let isAvailable = true;
         this.x = (1 + round(random()*30))*size;
         this.y = (1 + round(random()*16))*size;
-        while (isAvailable) {
-          snake.body.forEach(element => {
-            element.x === this.x ? isAvailable = isAvailable && false : isAvailable = isAvailable && true;
-          }); 
-          if (isAvailable) {
-            break;
-          } else {
-            this.x = (1 + round(random()*30))*size;
-          }
-        }
+        // while (isAvailable) {
+        //   snake.body.forEach(element => {
+        //     element.x === this.x ? isAvailable = isAvailable && false : isAvailable = isAvailable && true;
+        //   }); 
+        //   if (isAvailable) {
+        //     break;
+        //   } else {
+        //     this.x = (1 + round(random()*30))*size;
+        //   }
+        // }
       } else {
         this.x = round(random()*32)*size;
         this.y = round(random()*18)*size;
@@ -28,7 +28,8 @@ class Element {
     }
     this.head = head;
     this.isHead = isHead;
-    this.isFruit = isFruit
+    this.isFruit = isFruit;
+    if(fruit !== null) this.fruit = fruit;
   }
   show(){
     if(this.isFruit){
@@ -43,19 +44,14 @@ class Element {
         ellipse(this.x, this.y, size, size);
       } else {
         this.head.show();
-        // image(bodySprite, this.x, this.y);
-        if(snake.isAlive){
-          fill(255);
-        } else {
-          fill(255, 0, 0);
-        }
+        fill(255);
         ellipse(this.x, this.y, size, size);
       }
     } 
   }
 
   update(){
-    let temp = speed*size;
+    let temp = size;
     
     if(this.head === null){
       // I am a head
@@ -122,20 +118,20 @@ class Element {
   detectFruit(){
     //fruit collision detection
     let temp = 0;
-    let movement = speed*size;
+    let movement = size;
     switch(this.direction){
       case directionEnum.UP:
         temp = this.y - movement;
-        return fruit.elem.y === temp ? fruit.elem.x === this.x ? true : false : false;
+        return this.fruit.elem.y === temp ? this.fruit.elem.x === this.x ? true : false : false;
       case directionEnum.DOWN:
         temp = this.y + movement;
-        return fruit.elem.y === temp ? fruit.elem.x === this.x ? true : false : false;
+        return this.fruit.elem.y === temp ? this.fruit.elem.x === this.x ? true : false : false;
       case directionEnum.LEFT:
         temp = this.x - movement;
-        return fruit.elem.x === temp ? fruit.elem.y === this.y ? true : false : false;
+        return this.fruit.elem.x === temp ? this.fruit.elem.y === this.y ? true : false : false;
       case directionEnum.RIGHT:
         temp = this.x + movement;
-        return fruit.elem.x === temp ? fruit.elem.y === this.y ? true : false : false;
+        return this.fruit.elem.x === temp ? this.fruit.elem.y === this.y ? true : false : false;
       case directionEnum.PAUSE:
         break;
     }
@@ -144,9 +140,9 @@ class Element {
   detectBody(){
     //body collision detection
     let temp = 0;
-    let movement = speed*size;
+    let movement = size;
     let isBodyDetected = false;
-    snake.body.forEach(elem => {
+    this.body.forEach(elem => {
       // check if there is an element of body in the next move
       
       switch(elem.direction){
@@ -171,6 +167,14 @@ class Element {
       }
     }); 
     return isBodyDetected;
+  }
+
+  setBody (body){
+    this.body = body;
+  }
+
+  setFruit (fruit){
+    this.fruit = fruit;
   }
 
 }
